@@ -9,29 +9,43 @@
             color: white;
             text-align: center;
         }
+
         .container {
-            margin-top: 80px;
+            margin-top: 60px;
         }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             margin: 10px;
-            background: green;
+            background: #22c55e;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #16a34a;
         }
     </style>
 </head>
+
 <body>
-
-
 
 <div class="container">
     <h1>Welcome Rahul Kamble 🚀</h1>
 
-    <button onclick="openQuiz()">Start Quiz</button>
-    <button onclick="logout()">Logout</button>
+    <h2>Student Productivity Dashboard</h2>
+
+    <button onclick="openQuiz()">🧠 Quiz</button>
+    <button onclick="openAttendance()">📅 Attendance</button>
+    <button onclick="openPortfolio()">👤 Portfolio</button>
+    <button onclick="logout()">🚪 Logout</button>
 </div>
 
 <script>
@@ -39,12 +53,18 @@ function openQuiz(){
     window.location.href = "quiz.html";
 }
 
+function openAttendance(){
+    window.location.href = "attendance.html";
+}
+
+function openPortfolio(){
+    window.location.href = "portfolio.html";
+}
+
 function logout(){
     window.location.href = "index.html";
 }
 </script>
-
-
 
 </body>
 </html>
