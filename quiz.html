@@ -48,6 +48,7 @@ button {
     background: #22c55e;
     border: none;
     cursor: pointer;
+    border-radius: 5px;
 }
 
 #timer {
@@ -145,7 +146,7 @@ function checkAnswer(btn, selected){
         score++;
     }
 
-    // 🔥 auto next after 2 sec
+    // auto next after 2 sec
     setTimeout(nextQuestion, 2000);
 }
 
@@ -164,10 +165,16 @@ function nextQuestion(){
 
         document.getElementById("result").innerHTML =
             "Score: " + score + " / " + quiz.length + "<br>" +
-            "Percentage: " + percentage.toFixed(2) + "%";
+            "Percentage: " + percentage.toFixed(2) + "%<br><br>" +
+            "<button onclick='goDashboard()'>Back to Dashboard</button>";
     }
 }
 
+function goDashboard(){
+    window.location.href = "dashboard.html";
+}
+
+// start quiz
 loadQuestion();
 
 </script>
