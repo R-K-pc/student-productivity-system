@@ -2,174 +2,309 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Student Productivity System - Rahul Kamble</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Productivity System</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #333;
-}
+body { margin:0; font-family: Arial; background:#0f172a; color:white; }
+
+.hidden { display:none; }
 
 header {
-    text-align: center;
-    color: white;
-    padding: 20px;
-}
-
-nav {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px;
-}
-
-nav button {
-    padding: 10px 20px;
-    border-radius: 20px;
-    border: none;
-    cursor: pointer;
+    background:#1e293b;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
 }
 
 .container {
-    max-width: 900px;
-    margin: auto;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    padding:20px;
 }
 
-.card {
-    background: white;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 15px;
+.box {
+    background:#1e293b;
+    padding:15px;
+    border-radius:10px;
 }
 
-.section { display:none; }
+button {
+    padding:8px;
+    margin:5px;
+    border:none;
+    border-radius:5px;
+    background:#22c55e;
+    color:white;
+}
 
-.result-box {
-    font-weight: bold;
-    margin-top: 10px;
+input { padding:8px; margin:5px; width:90%; }
+
+@media(max-width:768px){
+    .container { grid-template-columns:1fr; }
 }
 </style>
 </head>
 
-<body onload="loadData()">
+<body>
 
+<!-- LOGIN -->
+<div id="login">
+<h2 style="text-align:center">Login</h2>
+<center>
+<input id="username" placeholder="Username"><br>
+<input id="password" type="password" placeholder="Password"><br>
+<button onclick="login()">Login</button>
+<p id="msg"></p>
+</center>
+</div>
+
+<!-- USER APP -->
+<div id="app" class="hidden">
 <header>
-<h1>Student Productivity System</h1>
-<p>Developed by Rahul Kamble</p>
+<h3>Welcome <span id="user"></span></h3>
+<button onclick="logout()">Logout</button>
 </header>
-
-<nav>
-<button onclick="showSection('attendance')">Attendance</button>
-<button onclick="showSection('quiz')">Quiz</button>
-<button onclick="showSection('portfolio')">Portfolio</button>
-</nav>
 
 <div class="container">
 
-<div id="attendance" class="card section">
-<h2>Attendance</h2>
-<input type="number" id="total" placeholder="Total Classes"><br>
-<input type="number" id="attended" placeholder="Attended Classes"><br>
-<button onclick="saveAttendance()">Save & Calculate</button>
-<div id="result" class="result-box"></div>
+<!-- TASK -->
+<div class="box">
+<h3>Tasks</h3>
+<input id="taskInput" placeholder="Add task">
+<button onclick="addTask()">Add</button>
+<ul id="taskList"></ul>
 </div>
 
-<div id="quiz" class="card section">
-<h2>Quiz</h2>
+<!-- QUIZ -->
+<div class="box">
+<h3>Quiz</h3>
+<form id="quizForm">
 
-<p>1. HTML is used for?</p>
-<input type="radio" name="q1" value="1"> Structure<br>
-<input type="radio" name="q1" value="0"> Database<br>
+<p>1. HTML stands for?</p>
+<input type="radio" name="q1" value="1"> Hyper Text Markup Language<br>
+<input type="radio" name="q1" value="0"> High Text<br>
 
-<p>2. CSS is used for?</p>
+<p>2. CSS used for?</p>
 <input type="radio" name="q2" value="1"> Styling<br>
 <input type="radio" name="q2" value="0"> Logic<br>
 
 <p>3. JS is?</p>
-<input type="radio" name="q3" value="1"> Programming Language<br>
+<input type="radio" name="q3" value="1"> Programming<br>
 <input type="radio" name="q3" value="0"> Hardware<br>
 
-<br>
-<button onclick="saveQuiz()">Submit & Save</button>
-<div id="score" class="result-box"></div>
+<p>4. Database?</p>
+<input type="radio" name="q4" value="1"> MySQL<br>
+<input type="radio" name="q4" value="0"> HTML<br>
+
+<p>5. Frontend?</p>
+<input type="radio" name="q5" value="1"> HTML<br>
+<input type="radio" name="q5" value="0"> Python<br>
+
+<p>6. JS used for?</p>
+<input type="radio" name="q6" value="1"> Logic<br>
+<input type="radio" name="q6" value="0"> Styling<br>
+
+<p>7. CSS full form?</p>
+<input type="radio" name="q7" value="1"> Cascading Style Sheets<br>
+<input type="radio" name="q7" value="0"> Computer Style<br>
+
+<p>8. Backend?</p>
+<input type="radio" name="q8" value="1"> Node.js<br>
+<input type="radio" name="q8" value="0"> HTML<br>
+
+<p>9. OS?</p>
+<input type="radio" name="q9" value="1"> Windows<br>
+<input type="radio" name="q9" value="0"> Chrome<br>
+
+<p>10. GitHub?</p>
+<input type="radio" name="q10" value="1"> Code hosting<br>
+<input type="radio" name="q10" value="0"> Browser<br>
+
+<button type="button" onclick="submitQuiz()">Submit</button>
+</form>
+
+<p id="quizScore"></p>
 </div>
 
-<div id="portfolio" class="card section">
-<h2>Portfolio</h2>
+<!-- CHART -->
+<div class="box">
+<h3>Productivity</h3>
+<canvas id="chart"></canvas>
+</div>
+
+<!-- PORTFOLIO -->
+<div class="box">
+<h3>Portfolio</h3>
 <p>Name: Rahul Kamble</p>
 <p>Branch: CSE</p>
-<p>Project: Student Productivity System</p>
+<p>College: Nagarjuna College of Engineering and Management</p>
+
+<p>Team:</p>
+<ul>
+<li>Rahul Kamble</li>
+<li>Pratik Shambharkar</li>
+<li>Anurag Gadhave</li>
+</ul>
 </div>
 
+</div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="admin" class="hidden">
+<header>
+<h3>Admin Dashboard</h3>
+<button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+
+<div class="box">
+<h3>Users</h3>
+<ul id="userList"></ul>
+</div>
+
+<div class="box">
+<h3>Analytics</h3>
+<canvas id="adminChart"></canvas>
+</div>
+
+</div>
 </div>
 
 <script>
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-// Show sections
-function showSection(section){
-    let sections=document.getElementsByClassName("section");
-    for(let i=0;i<sections.length;i++){
-        sections[i].style.display="none";
+// LOGIN
+function login(){
+    let u = username.value;
+    let p = password.value;
+
+    if(u=="rahul" && p=="1234"){
+        localStorage.setItem("user",u);
+        localStorage.setItem("role","student");
+
+        let users = JSON.parse(localStorage.getItem("users"))||[];
+        if(!users.includes(u)){
+            users.push(u);
+            localStorage.setItem("users",JSON.stringify(users));
+        }
+
+        showApp();
     }
-    document.getElementById(section).style.display="block";
+    else if(u=="admin" && p=="admin123"){
+        localStorage.setItem("role","admin");
+        showAdmin();
+    }
+    else{
+        msg.innerText="Invalid login";
+    }
 }
 
-// Attendance Save
-function saveAttendance(){
-    let total=document.getElementById("total").value;
-    let attended=document.getElementById("attended").value;
-
-    if(!total || !attended || total==0){
-        document.getElementById("result").innerHTML="Enter valid data";
-        return;
-    }
-
-    let percent=(attended/total)*100;
-    document.getElementById("result").innerHTML="Attendance: "+percent.toFixed(2)+"%";
-
-    localStorage.setItem("total", total);
-    localStorage.setItem("attended", attended);
-    localStorage.setItem("attendance", percent.toFixed(2));
+function showApp(){
+    loginDiv(false);
+    app.classList.remove("hidden");
+    user.innerText=localStorage.getItem("user");
+    renderTasks();
+    loadChart();
 }
 
-// Quiz Save
-function saveQuiz(){
+function showAdmin(){
+    loginDiv(false);
+    admin.classList.remove("hidden");
+    loadAdmin();
+}
+
+function loginDiv(show=true){
+    document.getElementById("login").style.display= show?"block":"none";
+}
+
+// LOGOUT
+function logout(){
+    localStorage.clear();
+    location.reload();
+}
+
+// TASK
+function addTask(){
+    let t=taskInput.value;
+    if(!t) return;
+    tasks.push({name:t,done:false});
+    localStorage.setItem("tasks",JSON.stringify(tasks));
+    renderTasks();
+}
+
+function renderTasks(){
+    taskList.innerHTML="";
+    tasks.forEach((t,i)=>{
+        let li=document.createElement("li");
+        li.innerHTML=`${t.name}
+        <button onclick="toggle(${i})">✔</button>
+        <button onclick="del(${i})">❌</button>`;
+        taskList.appendChild(li);
+    });
+}
+
+function toggle(i){
+    tasks[i].done=!tasks[i].done;
+    localStorage.setItem("tasks",JSON.stringify(tasks));
+    renderTasks(); loadChart();
+}
+
+function del(i){
+    tasks.splice(i,1);
+    localStorage.setItem("tasks",JSON.stringify(tasks));
+    renderTasks(); loadChart();
+}
+
+// QUIZ
+function submitQuiz(){
     let score=0;
-
-    let q1=document.querySelector('input[name="q1"]:checked');
-    let q2=document.querySelector('input[name="q2"]:checked');
-    let q3=document.querySelector('input[name="q3"]:checked');
-
-    if(!q1 || !q2 || !q3){
-        document.getElementById("score").innerHTML="Answer all questions";
-        return;
+    for(let i=1;i<=10;i++){
+        let a=document.querySelector(`input[name=q${i}]:checked`);
+        if(a) score+=parseInt(a.value);
     }
-
-    score+=parseInt(q1.value);
-    score+=parseInt(q2.value);
-    score+=parseInt(q3.value);
-
-    document.getElementById("score").innerHTML="Score: "+score+"/3";
-
-    localStorage.setItem("quizScore", score);
+    quizScore.innerText="Score: "+score+"/10";
+    localStorage.setItem("quizScore",score);
 }
 
-// Load Data
-function loadData(){
-    let total=localStorage.getItem("total");
-    let attended=localStorage.getItem("attended");
-    let attendance=localStorage.getItem("attendance");
-    let quizScore=localStorage.getItem("quizScore");
+// USER CHART
+function loadChart(){
+    let done=tasks.filter(t=>t.done).length;
+    let pending=tasks.length-done;
 
-    if(total) document.getElementById("total").value=total;
-    if(attended) document.getElementById("attended").value=attended;
-    if(attendance) document.getElementById("result").innerHTML="Attendance: "+attendance+"%";
-    if(quizScore) document.getElementById("score").innerHTML="Score: "+quizScore+"/3";
+    new Chart(chart,{
+        type:'doughnut',
+        data:{labels:["Done","Pending"],
+        datasets:[{data:[done,pending]}]}
+    });
 }
 
+// ADMIN
+function loadAdmin(){
+    let users = JSON.parse(localStorage.getItem("users"))||[];
+    userList.innerHTML="";
+    users.forEach(u=>{
+        let li=document.createElement("li");
+        li.innerText=u;
+        userList.appendChild(li);
+    });
+
+    let done=tasks.filter(t=>t.done).length;
+    let pending=tasks.length-done;
+
+    new Chart(adminChart,{
+        type:'bar',
+        data:{
+            labels:["Done","Pending"],
+            datasets:[{data:[done,pending]}]
+        }
+    });
+}
 </script>
 
 </body>
