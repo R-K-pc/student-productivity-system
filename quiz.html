@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quiz</title>
+    <title>Advanced Quiz</title>
     <style>
         body {
             font-family: Arial;
@@ -9,41 +9,92 @@
             color: white;
             text-align: center;
         }
+        .container {
+            margin-top: 60px;
+        }
         button {
             padding: 10px 20px;
             margin: 10px;
             background: green;
             color: white;
             border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        .option {
+            display: block;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
 
-<h1>Quiz Page</h1>
+<div class="container">
+    <h1>Quiz</h1>
 
-<p>Q1: What is 2 + 2 ?</p>
-<button onclick="check(4)">4</button>
-<button onclick="check(5)">5</button>
+    <h3 id="question"></h3>
 
-<p id="result"></p>
+    <div id="options"></div>
 
-<br>
-<button onclick="goBack()">Back to Dashboard</button>
+    <button onclick="nextQuestion()">Next</button>
+
+    <h2 id="score"></h2>
+
+    <button onclick="goBack()">Back to Dashboard</button>
+</div>
 
 <script>
-function check(ans){
-    if(ans == 4){
-        document.getElementById("result").innerText = "Correct ✅";
+const quiz = [
+    {q:"2+2=?", options:[2,3,4,5], answer:4},
+    {q:"Capital of India?", options:["Delhi","Mumbai","Pune","Nagpur"], answer:"Delhi"},
+    {q:"5*2=?", options:[10,5,15,20], answer:10},
+    {q:"HTML stands for?", options:["Hyper Text Markup Language","High Text Machine Language","Hyper Tool Multi Language","None"], answer:"Hyper Text Markup Language"},
+    {q:"CSS is used for?", options:["Styling","Programming","Database","Server"], answer:"Styling"},
+    {q:"JS is?", options:["Language","Database","Browser","OS"], answer:"Language"},
+    {q:"10/2=?", options:[2,5,10,20], answer:5},
+    {q:"Sun rises from?", options:["East","West","North","South"], answer:"East"},
+    {q:"Which is not a language?", options:["HTML","Python","Java","Car"], answer:"Car"},
+    {q:"3+5=?", options:[5,6,7,8], answer:8}
+];
+
+let index = 0;
+let score = 0;
+
+function loadQuestion(){
+    document.getElementById("score").innerText = "";
+    let q = quiz[index];
+    document.getElementById("question").innerText = q.q;
+
+    let optionsHTML = "";
+    q.options.forEach(opt => {
+        optionsHTML += `<button class="option" onclick="checkAnswer('${opt}')">${opt}</button>`;
+    });
+
+    document.getElementById("options").innerHTML = optionsHTML;
+}
+
+function checkAnswer(ans){
+    if(ans == quiz[index].answer){
+        score++;
+    }
+}
+
+function nextQuestion(){
+    index++;
+    if(index < quiz.length){
+        loadQuestion();
     } else {
-        document.getElementById("result").innerText = "Wrong ❌";
+        document.getElementById("question").innerText = "Quiz Completed!";
+        document.getElementById("options").innerHTML = "";
+        document.getElementById("score").innerText = "Your Score: " + score + "/10";
     }
 }
 
 function goBack(){
     window.location.href = "dashboard.html";
 }
+
+loadQuestion();
 </script>
 
 </body>
