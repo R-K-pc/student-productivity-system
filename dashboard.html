@@ -5,20 +5,54 @@
 <style>
 body {
     font-family: Arial;
-    background: #111827;
+    background: #0f172a;
     color: white;
     text-align: center;
 }
-h1 {
-    margin-top: 100px;
+.container {
+    margin-top: 80px;
+}
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background: green;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:hover {
+    background: darkgreen;
 }
 </style>
 </head>
 
 <body>
 
-<h1>Welcome to Dashboard 🚀</h1>
-<p>Login Successful</p>
+<div class="container">
+<h1>Welcome Rahul Kamble 🚀</h1>
+
+<h2>Dashboard</h2>
+
+<button onclick="goQuiz()">Quiz</button>
+<button onclick="goAdmin()">Admin Panel</button>
+<button onclick="logout()">Logout</button>
+
+</div>
+
+<script>
+function goQuiz(){
+    window.location.href = "quiz.html";
+}
+
+function goAdmin(){
+    window.location.href = "admin.html";
+}
+
+function logout(){
+    window.location.href = "index.html";
+}
+</script>
 
 </body>
 </html>
