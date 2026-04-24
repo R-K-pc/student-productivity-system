@@ -110,7 +110,7 @@ function loadQuestion(){
     },1000);
 
     let q = quiz[index];
-    document.getElementById("question").innerText = q.q;
+    document.getElementById("question").innerText = "Q" + (index + 1) + ". " + q.q;
 
     let optionsHTML = "";
     q.options.forEach(opt => {
@@ -146,7 +146,6 @@ function checkAnswer(btn, selected){
         score++;
     }
 
-    // auto next after 2 sec
     setTimeout(nextQuestion, 2000);
 }
 
@@ -174,7 +173,6 @@ function goDashboard(){
     window.location.href = "dashboard.html";
 }
 
-// start quiz
 loadQuestion();
 
 </script>
