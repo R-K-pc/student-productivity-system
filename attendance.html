@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Attendance</title>
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #0f172a;
+    color: white;
+}
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Attendance System 📅</h1>
+
+<p>Total Classes: <span id="total">0</span></p>
+<p>Attended Classes: <span id="attended">0</span></p>
+
+<button onclick="markPresent()">Mark Present</button>
+
+<script>
+let total = 0;
+let attended = 0;
+
+function markPresent(){
+    total++;
+    attended++;
+    document.getElementById("total").innerText = total;
+    document.getElementById("attended").innerText = attended;
+}
+</script>
+
+<br><br>
+<a href="dashboard.html">⬅ Back to Dashboard</a>
+
+</body>
+</html>
