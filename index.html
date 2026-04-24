@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Productivity System - Rahul Kamble</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #333;
+}
+
+header {
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px;
+}
+
+nav button {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 15px;
+}
+
+.section { display:none; }
+
+.result-box {
+    font-weight: bold;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body onload="loadData()">
+
+<header>
+<h1>Student Productivity System</h1>
+<p>Developed by Rahul Kamble</p>
+</header>
+
+<nav>
+<button onclick="showSection('attendance')">Attendance</button>
+<button onclick="showSection('quiz')">Quiz</button>
+<button onclick="showSection('portfolio')">Portfolio</button>
+</nav>
+
+<div class="container">
+
+<div id="attendance" class="card section">
+<h2>Attendance</h2>
+<input type="number" id="total" placeholder="Total Classes"><br>
+<input type="number" id="attended" placeholder="Attended Classes"><br>
+<button onclick="saveAttendance()">Save & Calculate</button>
+<div id="result" class="result-box"></div>
+</div>
+
+<div id="quiz" class="card section">
+<h2>Quiz</h2>
+
+<p>1. HTML is used for?</p>
+<input type="radio" name="q1" value="1"> Structure<br>
+<input type="radio" name="q1" value="0"> Database<br>
+
+<p>2. CSS is used for?</p>
+<input type="radio" name="q2" value="1"> Styling<br>
+<input type="radio" name="q2" value="0"> Logic<br>
+
+<p>3. JS is?</p>
+<input type="radio" name="q3" value="1"> Programming Language<br>
+<input type="radio" name="q3" value="0"> Hardware<br>
+
+<br>
+<button onclick="saveQuiz()">Submit & Save</button>
+<div id="score" class="result-box"></div>
+</div>
+
+<div id="portfolio" class="card section">
+<h2>Portfolio</h2>
+<p>Name: Rahul Kamble</p>
+<p>Branch: CSE</p>
+<p>Project: Student Productivity System</p>
+</div>
+
+</div>
+
+<script>
+
+// Show sections
+function showSection(section){
+    let sections=document.getElementsByClassName("section");
+    for(let i=0;i<sections.length;i++){
+        sections[i].style.display="none";
+    }
+    document.getElementById(section).style.display="block";
+}
+
+// Attendance Save
+function saveAttendance(){
+    let total=document.getElementById("total").value;
+    let attended=document.getElementById("attended").value;
+
+    if(!total || !attended || total==0){
+        document.getElementById("result").innerHTML="Enter valid data";
+        return;
+    }
+
+    let percent=(attended/total)*100;
+    document.getElementById("result").innerHTML="Attendance: "+percent.toFixed(2)+"%";
+
+    localStorage.setItem("total", total);
+    localStorage.setItem("attended", attended);
+    localStorage.setItem("attendance", percent.toFixed(2));
+}
+
+// Quiz Save
+function saveQuiz(){
+    let score=0;
+
+    let q1=document.querySelector('input[name="q1"]:checked');
+    let q2=document.querySelector('input[name="q2"]:checked');
+    let q3=document.querySelector('input[name="q3"]:checked');
+
+    if(!q1 || !q2 || !q3){
+        document.getElementById("score").innerHTML="Answer all questions";
+        return;
+    }
+
+    score+=parseInt(q1.value);
+    score+=parseInt(q2.value);
+    score+=parseInt(q3.value);
+
+    document.getElementById("score").innerHTML="Score: "+score+"/3";
+
+    localStorage.setItem("quizScore", score);
+}
+
+// Load Data
+function loadData(){
+    let total=localStorage.getItem("total");
+    let attended=localStorage.getItem("attended");
+    let attendance=localStorage.getItem("attendance");
+    let quizScore=localStorage.getItem("quizScore");
+
+    if(total) document.getElementById("total").value=total;
+    if(attended) document.getElementById("attended").value=attended;
+    if(attendance) document.getElementById("result").innerHTML="Attendance: "+attendance+"%";
+    if(quizScore) document.getElementById("score").innerHTML="Score: "+quizScore+"/3";
+}
+
+</script>
+
+</body>
+</html>
