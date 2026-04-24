@@ -17,18 +17,30 @@ body {
 
 .option {
     display: block;
-    padding: 10px;
+    padding: 12px;
     margin: 10px auto;
-    width: 250px;
-    background: green;
-    color: white;
+    width: 260px;
+    background: white;
+    color: black;
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    font-weight: bold;
 }
 
-.correct { background: green !important; }
-.wrong { background: red !important; }
+.option:hover {
+    background: #ddd;
+}
+
+.correct {
+    background: green !important;
+    color: white;
+}
+
+.wrong {
+    background: red !important;
+    color: white;
+}
 
 button {
     padding: 10px 20px;
@@ -39,9 +51,8 @@ button {
 }
 
 #timer {
-    font-size: 18px;
-    margin-bottom: 15px;
     color: yellow;
+    font-size: 18px;
 }
 </style>
 
@@ -119,9 +130,12 @@ function checkAnswer(btn, selected){
     let buttons = document.querySelectorAll(".option");
 
     buttons.forEach(b => {
+        b.disabled = true;
+
         if(b.innerText === correct){
             b.classList.add("correct");
         }
+
         if(b.innerText === selected && selected !== correct){
             b.classList.add("wrong");
         }
@@ -130,6 +144,9 @@ function checkAnswer(btn, selected){
     if(selected === correct){
         score++;
     }
+
+    // 🔥 auto next after 2 sec
+    setTimeout(nextQuestion, 2000);
 }
 
 function nextQuestion(){
@@ -151,7 +168,6 @@ function nextQuestion(){
     }
 }
 
-// Start quiz
 loadQuestion();
 
 </script>
