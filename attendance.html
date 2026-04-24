@@ -6,53 +6,32 @@
 <style>
 body {
     font-family: Arial;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.card {
-    background: #fff;
-    padding: 30px;
-    border-radius: 15px;
+    background: #0f172a;
+    color: white;
     text-align: center;
-    width: 320px;
 }
 
-h1 {
-    margin-bottom: 20px;
+.container {
+    margin-top: 80px;
 }
 
 input {
-    width: 90%;
     padding: 10px;
     margin: 10px;
-    font-size: 16px;
+    width: 200px;
 }
 
 button {
     padding: 10px 20px;
-    margin: 8px;
-    background: #444;
+    background: green;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .result {
-    margin-top: 15px;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.good { color: green; }
-.bad { color: red; }
-
-.counter {
     margin-top: 20px;
-    font-size: 16px;
+    font-size: 20px;
 }
 </style>
 
@@ -60,90 +39,45 @@ button {
 
 <body>
 
-<div class="card">
-    <h1>Attendance</h1>
+<div class="container">
+    <h1>Attendance System</h1>
 
-    <!-- INPUT SECTION -->
-    <input type="number" id="total" placeholder="Total Classes">
-    <input type="number" id="attended" placeholder="Attended Classes">
+    <input type="number" id="total" placeholder="Total Classes"><br>
+    <input type="number" id="present" placeholder="Present Classes"><br>
 
-    <button onclick="calculate()">Save & Calculate</button>
+    <button onclick="calculate()">Calculate</button>
 
     <div class="result" id="result"></div>
 
-    <!-- MARK PRESENT SECTION -->
-    <div class="counter">
-        <p>Total: <span id="totalCount">0</span></p>
-        <p>Present: <span id="presentCount">0</span></p>
-
-        <button onclick="markPresent()">Mark Present</button>
-    </div>
-
     <br>
-    <a href="dashboard.html">Back</a>
+    <a href="dashboard.html" style="color:white;">Back to Dashboard</a>
 </div>
 
 <script>
 
-// Load saved data
-window.onload = function(){
-    let total = localStorage.getItem("total");
-    let attended = localStorage.getItem("attended");
-
-    let tCount = localStorage.getItem("tCount") || 0;
-    let pCount = localStorage.getItem("pCount") || 0;
-
-    document.getElementById("totalCount").innerText = tCount;
-    document.getElementById("presentCount").innerText = pCount;
-
-    if(total && attended){
-        document.getElementById("total").value = total;
-        document.getElementById("attended").value = attended;
-        showResult(total, attended);
-    }
-};
-
-// CALCULATE %
 function calculate(){
     let total = document.getElementById("total").value;
-    let attended = document.getElementById("attended").value;
+    let present = document.getElementById("present").value;
 
-    if(total == 0 || attended > total){
+    if(total == 0 || present > total){
         alert("Enter valid values");
         return;
     }
 
-    localStorage.setItem("total", total);
-    localStorage.setItem("attended", attended);
+    let percentage = (present / total) * 100;
 
-    showResult(total, attended);
-}
+    let status = "";
+    if(percentage >= 75){
+        status = "Good Attendance ✅";
+    } else {
+        status = "Low Attendance ❌";
+    }
 
-function showResult(total, attended){
-    let percentage = (attended / total) * 100;
-    let resultDiv = document.getElementById("result");
-
-    let status = percentage >= 75 ? "Good Attendance ✅" : "Low Attendance ❌";
-    let color = percentage >= 75 ? "good" : "bad";
-
-    resultDiv.innerHTML =
+    document.getElementById("result").innerHTML =
+        "Total Classes: " + total + "<br>" +
+        "Present: " + present + "<br>" +
         "Attendance: " + percentage.toFixed(2) + "%<br>" +
-        "<span class='" + color + "'>" + status + "</span>";
-}
-
-// MARK PRESENT SYSTEM
-function markPresent(){
-    let total = parseInt(localStorage.getItem("tCount")) || 0;
-    let present = parseInt(localStorage.getItem("pCount")) || 0;
-
-    total++;
-    present++;
-
-    localStorage.setItem("tCount", total);
-    localStorage.setItem("pCount", present);
-
-    document.getElementById("totalCount").innerText = total;
-    document.getElementById("presentCount").innerText = present;
+        status;
 }
 
 </script>
