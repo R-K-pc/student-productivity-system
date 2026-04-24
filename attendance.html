@@ -34,7 +34,7 @@ input {
 
 button {
     padding: 10px 20px;
-    margin-top: 10px;
+    margin: 8px;
     background: #444;
     color: white;
     border: none;
@@ -42,22 +42,17 @@ button {
 }
 
 .result {
-    margin-top: 20px;
+    margin-top: 15px;
     font-size: 18px;
     font-weight: bold;
 }
 
-.good {
-    color: green;
-}
+.good { color: green; }
+.bad { color: red; }
 
-.bad {
-    color: red;
-}
-
-a {
-    display: block;
-    margin-top: 15px;
+.counter {
+    margin-top: 20px;
+    font-size: 16px;
 }
 </style>
 
@@ -68,6 +63,7 @@ a {
 <div class="card">
     <h1>Attendance</h1>
 
+    <!-- INPUT SECTION -->
     <input type="number" id="total" placeholder="Total Classes">
     <input type="number" id="attended" placeholder="Attended Classes">
 
@@ -75,15 +71,30 @@ a {
 
     <div class="result" id="result"></div>
 
+    <!-- MARK PRESENT SECTION -->
+    <div class="counter">
+        <p>Total: <span id="totalCount">0</span></p>
+        <p>Present: <span id="presentCount">0</span></p>
+
+        <button onclick="markPresent()">Mark Present</button>
+    </div>
+
+    <br>
     <a href="dashboard.html">Back</a>
 </div>
 
 <script>
 
-// Load saved data when page opens
+// Load saved data
 window.onload = function(){
     let total = localStorage.getItem("total");
     let attended = localStorage.getItem("attended");
+
+    let tCount = localStorage.getItem("tCount") || 0;
+    let pCount = localStorage.getItem("pCount") || 0;
+
+    document.getElementById("totalCount").innerText = tCount;
+    document.getElementById("presentCount").innerText = pCount;
 
     if(total && attended){
         document.getElementById("total").value = total;
@@ -92,6 +103,7 @@ window.onload = function(){
     }
 };
 
+// CALCULATE %
 function calculate(){
     let total = document.getElementById("total").value;
     let attended = document.getElementById("attended").value;
@@ -101,7 +113,6 @@ function calculate(){
         return;
     }
 
-    // Save data
     localStorage.setItem("total", total);
     localStorage.setItem("attended", attended);
 
@@ -112,21 +123,29 @@ function showResult(total, attended){
     let percentage = (attended / total) * 100;
     let resultDiv = document.getElementById("result");
 
-    let status = "";
-    let className = "";
-
-    if(percentage >= 75){
-        status = "Good Attendance ✅";
-        className = "good";
-    } else {
-        status = "Low Attendance ❌";
-        className = "bad";
-    }
+    let status = percentage >= 75 ? "Good Attendance ✅" : "Low Attendance ❌";
+    let color = percentage >= 75 ? "good" : "bad";
 
     resultDiv.innerHTML =
         "Attendance: " + percentage.toFixed(2) + "%<br>" +
-        "<span class='" + className + "'>" + status + "</span>";
+        "<span class='" + color + "'>" + status + "</span>";
 }
+
+// MARK PRESENT SYSTEM
+function markPresent(){
+    let total = parseInt(localStorage.getItem("tCount")) || 0;
+    let present = parseInt(localStorage.getItem("pCount")) || 0;
+
+    total++;
+    present++;
+
+    localStorage.setItem("tCount", total);
+    localStorage.setItem("pCount", present);
+
+    document.getElementById("totalCount").innerText = total;
+    document.getElementById("presentCount").innerText = present;
+}
+
 </script>
 
 </body>
